@@ -20,5 +20,36 @@ def submit_user():
     User.save(data)
     return redirect('/')
 
+@app.route('/show/<id>/')
+def show(id):
+    user = User.get_by_id({"id":id})
+    return render_template("show_one.html",user=user)
+
+@app.route('/edit/<id>/')
+def edit(id):
+    user = User.get_by_id({"id":id})
+    return render_template("edit_user.html",user=user)
+
+@app.route('/edit_user', methods=['POST'])
+def method_name():
+    data={
+        'id':request.form['id'],
+        'fname': request.form['fname'],
+        'lname': request.form['lname'],
+        'email': request.form['email']
+    }
+    User.update(data)
+    return redirect('/')
+
+@app.route('/delete/<id>/')
+def confirm_delete(id):
+    user = User.get_by_id({"id":id})
+    return render_template('confirm_delete.html',user=user)
+
+@app.route('/delete_user', methods=['POST'])
+def delete():
+    User.delete({'id':request.form['user']})
+    return redirect('/')
+
 if __name__ == '__main__':
     app.run(debug=True)
